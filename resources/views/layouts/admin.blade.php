@@ -25,6 +25,9 @@
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6">
             @yield('content')
         </main>
+
+        <!-- Footer -->
+        @include('admin.components.footer')
     </div>
 </body>
 
