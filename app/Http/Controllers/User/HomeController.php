@@ -10,5 +10,10 @@ class HomeController extends Controller
     {
         return view('user.pages.home');
     }
+
+    public function createPost()
+    {
+        return view('user.pages.create-post');
+    }
 }
 

@@ -1,4 +1,5 @@
 @extends('layouts.user')
+@section('title', 'Home')
 
 @section('content')
     <div class="bg-indigo-700 text-white py-12">
@@ -44,7 +45,7 @@
             <!-- Post Card 1 -->
             <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative h-48">
-                    <img class="w-full h-full object-cover" src="/api/placeholder/400/192" alt="Post image">
+                    <img class="w-full h-full object-cover" src="https://picsum.photos/400/192" alt="Post image">
                     <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full h-1/2"></div>
                     <div class="absolute bottom-0 left-0 p-4">
                         <span
@@ -53,7 +54,7 @@
                 </div>
                 <div class="p-5">
                     <h2 class="font-bold text-xl mb-2 hover:text-indigo-600">
-                        <a href="#">The Future of Web Development in 2025</a>
+                        <a href="{{ route('detail-post.index') }}">The Future of Web Development in 2025</a>
                     </h2>
                     <p class="text-gray-600 text-sm mb-4">Exploring the latest trends and technologies shaping the future of
                         web development...</p>
@@ -69,13 +70,15 @@
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm text-gray-500">
-                        <div class="flex items-center mr-4">
+                        <a href="{{ route('detail-post.index') }}"
+                            class="flex items-center mr-4 hover:text-indigo-600 transition">
                             <i class="far fa-comment mr-1"></i>
                             <span>24 comments</span>
-                        </div>
+                        </a>
+
                         <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>86 likes</span>
+                            <i class="far fa-eye mr-1"></i>
+                            <span>1,203 views</span>
                         </div>
                     </div>
                 </div>
@@ -84,7 +87,7 @@
             <!-- Post Card 2 -->
             <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative h-48">
-                    <img class="w-full h-full object-cover" src="/api/placeholder/400/192" alt="Post image">
+                    <img class="w-full h-full object-cover" src="https://picsum.photos/400/192?t=9{{ time() }}" alt="Post image">
                     <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full h-1/2"></div>
                     <div class="absolute bottom-0 left-0 p-4">
                         <span
@@ -114,8 +117,8 @@
                             <span>18 comments</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>42 likes</span>
+                            <i class="far fa-eye mr-1"></i>
+                            <span>1,203 views</span>
                         </div>
                     </div>
                 </div>
@@ -124,7 +127,7 @@
             <!-- Post Card 3 -->
             <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative h-48">
-                    <img class="w-full h-full object-cover" src="/api/placeholder/400/192" alt="Post image">
+                    <img class="w-full h-full object-cover" src="https://picsum.photos/400/192?t=2{{ time() }}" alt="Post image">
                     <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full h-1/2"></div>
                     <div class="absolute bottom-0 left-0 p-4">
                         <span
@@ -154,8 +157,8 @@
                             <span>31 comments</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>65 likes</span>
+                            <i class="far fa-eye mr-1"></i>
+                            <span>1,203 views</span>
                         </div>
                     </div>
                 </div>
@@ -164,7 +167,7 @@
             <!-- Post Card 4 -->
             <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative h-48">
-                    <img class="w-full h-full object-cover" src="/api/placeholder/400/192" alt="Post image">
+                    <img class="w-full h-full object-cover" src="https://picsum.photos/400/192?t=3{{ time() }}" alt="Post image">
                     <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full h-1/2"></div>
                     <div class="absolute bottom-0 left-0 p-4">
                         <span
@@ -194,8 +197,8 @@
                             <span>47 comments</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>103 likes</span>
+                            <i class="far fa-eye mr-1"></i>
+                            <span>1,203 views</span>
                         </div>
                     </div>
                 </div>
@@ -204,7 +207,7 @@
             <!-- Post Card 5 -->
             <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative h-48">
-                    <img class="w-full h-full object-cover" src="/api/placeholder/400/192" alt="Post image">
+                    <img class="w-full h-full object-cover" src="https://picsum.photos/400/192?t=4{{ time() }}" alt="Post image">
                     <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full h-1/2"></div>
                     <div class="absolute bottom-0 left-0 p-4">
                         <span
@@ -234,8 +237,8 @@
                             <span>39 comments</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>78 likes</span>
+                            <i class="far fa-eye mr-1"></i>
+                            <span>1,203 views</span>
                         </div>
                     </div>
                 </div>
@@ -244,7 +247,7 @@
             <!-- Post Card 6 -->
             <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative h-48">
-                    <img class="w-full h-full object-cover" src="/api/placeholder/400/192" alt="Post image">
+                    <img class="w-full h-full object-cover" src="https://picsum.photos/400/192?t=5{{ time() }}" alt="Post image">
                     <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full h-1/2"></div>
                     <div class="absolute bottom-0 left-0 p-4">
                         <span
@@ -274,8 +277,8 @@
                             <span>52 comments</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>124 likes</span>
+                            <i class="far fa-eye mr-1"></i>
+                            <span>1,203 views</span>
                         </div>
                     </div>
                 </div>

@@ -8,20 +8,34 @@
                 </a>
             </div>
 
-            <div class="hidden md:flex items-center flex-1 max-w-lg mx-8">
-                <div class="w-full relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
+            @if(Route::currentRouteName() === 'dashboard.user')
+                <div class="hidden md:flex items-center flex-1 max-w-lg mx-8">
+                    <div class="w-full relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" placeholder="Search posts..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
-                    <input type="text" placeholder="Search posts..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                 </div>
-            </div>
+            @endif
+
 
             <div class="hidden md:flex items-center space-x-1">
-                <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Home</a>
-                <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Topics</a>
-                <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">About</a>
-                <a href="#" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">Write Post</a>
+                <a href="{{ route('dashboard.user') }}"
+                class="px-3 py-2 rounded-md text-sm font-medium {{ Route::currentRouteName() === 'dashboard.user' ? 'bg-gray-100' : 'text-gray-700 hover:bg-gray-100' }}">
+                    Home
+                </a>
+
+                <a href="{{ route('about.index') }}"
+                class="px-3 py-2 rounded-md text-sm font-medium {{ Route::currentRouteName() === 'about.index' ? 'bg-gray-100' : 'text-gray-700 hover:bg-gray-100' }}">
+                    About
+                </a>
+
+                <a href="{{ route('profile.users') }}"
+                class="px-3 py-2 rounded-md text-sm font-medium {{ Route::currentRouteName() === 'profile.users' ? 'bg-gray-100' : 'text-gray-700 hover:bg-gray-100' }}">
+                    Profile
+                </a>
+                <a href="{{ route('post.create') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">Write Post</a>
 
                 <!-- User Dropdown -->
                 <div class="ml-3 relative" x-data="{ open: false }">
@@ -47,40 +61,33 @@
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="transform opacity-100 scale-100"
                         x-transition:leave-end="transform opacity-0 scale-95"
-                        class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-30"
+                        class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-gray-200 ring-opacity-50 divide-y divide-gray-100 focus:outline-none z-30"
                         role="menu"
                         aria-orientation="vertical"
                         aria-labelledby="user-menu-button"
                         tabindex="-1">
-                        <div class="py-1">
-                            <div class="px-4 py-2">
-                                <p class="text-sm font-medium text-gray-900">John Doe</p>
-                                <p class="text-xs text-gray-500 truncate">john.doe@example.com</p>
-                            </div>
+
+                        <!-- Profile Info Section -->
+                        <div class="py-2 px-4">
+                            <p class="text-sm font-semibold text-gray-900">John Doe</p>
+                            <p class="text-xs text-gray-500 truncate">john.doe@example.com</p>
                         </div>
-                        <div class="py-1">
-                            <a href="#" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1">
-                                <i class="fas fa-user-circle mr-3 text-gray-400 group-hover:text-gray-500"></i>
-                                Your Profile
-                            </a>
-                            <a href="#" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1">
-                                <i class="fas fa-cog mr-3 text-gray-400 group-hover:text-gray-500"></i>
-                                Settings
-                            </a>
-                            <a href="#" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1">
-                                <i class="fas fa-bookmark mr-3 text-gray-400 group-hover:text-gray-500"></i>
-                                My Posts
-                            </a>
-                        </div>
+
+                        <!-- Sign Out Link -->
                         <a href="#" onclick="event.preventDefault(); document.getElementById('dropdown-logout-form').submit();"
-                        class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1">
-                            <i class="fas fa-sign-out-alt mr-3 text-gray-400 group-hover:text-gray-500"></i>
+                        class="group flex items-center px-4 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                        role="menuitem" tabindex="-1">
+                            <i class="fas fa-sign-out-alt mr-3 text-red-400 group-hover:text-red-500"></i>
                             Sign out
                         </a>
+
+                        <!-- Hidden Form for Logout -->
                         <form id="dropdown-logout-form" action="{{ url('/logout') }}" method="POST" class="hidden">
                             @csrf
                         </form>
                     </div>
+
+
                 </div>
             </div>
 
@@ -97,6 +104,7 @@
     </div>
 
     <!-- Mobile search - shown below navbar on small screens -->
+    @if(Route::currentRouteName() === 'dashboard.user')
     <div class="md:hidden border-t border-gray-200 py-2 px-4">
         <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -105,6 +113,7 @@
             <input type="text" placeholder="Search posts..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
         </div>
     </div>
+    @endif
 </nav>
 
 <!-- Mobile Menu Slide-in -->
@@ -131,33 +140,45 @@
     <!-- Mobile menu content -->
     <nav class="mt-2 px-4">
         <div class="py-3 border-b border-gray-200">
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-600">
+        <p class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Homepage</p>
+        <a href="{{ route('dashboard.user') }}"
+            class="block px-3 py-2 rounded-md text-base font-medium
+                    {{ Route::currentRouteName() === 'dashboard.user' ? 'bg-gray-100 text-indigo-600' : 'text-gray-900 hover:bg-gray-100 hover:text-indigo-600' }}">
                 <i class="fas fa-home mr-3 text-gray-500"></i>
                 Home
             </a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-600">
+
+            <a href="{{ route('profile.users') }}"
+            class="block px-3 py-2 rounded-md text-base font-medium
+                    {{ Route::currentRouteName() === 'profile.users' ? 'bg-gray-100 text-indigo-600' : 'text-gray-900 hover:bg-gray-100 hover:text-indigo-600' }}">
                 <i class="fas fa-list-alt mr-3 text-gray-500"></i>
-                Topics
+                Profile
             </a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-600">
+
+            <a href="{{ route('about.index') }}"
+            class="block px-3 py-2 rounded-md text-base font-medium
+                    {{ Route::currentRouteName() === 'about.index' ? 'bg-gray-100 text-indigo-600' : 'text-gray-900 hover:bg-gray-100 hover:text-indigo-600' }}">
                 <i class="fas fa-info-circle mr-3 text-gray-500"></i>
                 About
             </a>
         </div>
 
+
+        <div class="py-3 border-b border-gray-200">
+            <p class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Posting</p>
+            <a href="{{ route('post.create') }}"
+            class="block px-3 py-2 rounded-md text-base font-medium {{ Route::currentRouteName() === 'post.create' ? 'bg-indigo-600 text-white' : 'text-gray-900 hover:bg-gray-100 hover:text-indigo-600' }}">
+                <i class="fa-solid fa-pencil mr-3 text-gray-500"></i>
+                Write Post
+            </a>
+        </div>
+
         <div class="py-3 border-b border-gray-200">
             <p class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</p>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-600">
+            <a href="{{ route('profile.users') }}"
+            class="block px-3 py-2 rounded-md text-base font-medium {{ Route::currentRouteName() === 'profile.users' ? 'bg-gray-100 text-indigo-600' : 'text-gray-900 hover:bg-gray-100 hover:text-indigo-600' }}">
                 <i class="fas fa-user-circle mr-3 text-gray-500"></i>
                 Your Profile
-            </a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-600">
-                <i class="fas fa-cog mr-3 text-gray-500"></i>
-                Settings
-            </a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-indigo-600">
-                <i class="fas fa-bookmark mr-3 text-gray-500"></i>
-                My Posts
             </a>
         </div>
 
