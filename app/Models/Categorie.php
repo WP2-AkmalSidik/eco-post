@@ -9,8 +9,13 @@ class Categorie extends Model
 {
     protected $fillable = ['name', 'slug'];
 
-    public function posts(): BelongsToMany
+    public function posts()
     {
-        return $this->belongsToMany(Post::class, 'post_category');
+        return $this->belongsToMany(Post::class, 'post_category', 'category_id', 'post_id');
+    }
+
+    public function getNameAttribute($value)
+    {
+        return $value;
     }
 }

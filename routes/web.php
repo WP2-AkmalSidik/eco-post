@@ -34,7 +34,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin');
     Route::get('/posts', [PostsController::class, 'index'])->name('posts.index');
     Route::get('/users', [ManagementUserController::class, 'index'])->name('users-management.index');
-    Route::get('/category', [CategoriesController::class, 'index'])->name('category.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    // category
+    Route::get('/category', [CategoriesController::class, 'index'])->name('category.index');
+    Route::post('/categories', [CategoriesController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{category}', [CategoriesController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
 });
 
