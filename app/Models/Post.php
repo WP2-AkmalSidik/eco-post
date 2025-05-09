@@ -32,10 +32,9 @@ class Post extends Model
         return $minutes;
     }
 
-    // app/Models/Post.php
     public function totalCommentsCount()
     {
-        return $this->comments()->count(); // Ini akan menghitung semua komentar termasuk replies
+        return $this->comments()->count();
     }
 }
 

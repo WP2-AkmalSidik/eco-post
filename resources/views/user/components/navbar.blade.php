@@ -1,7 +1,6 @@
 <nav class="bg-white shadow-sm sticky top-0 z-10" x-data="{ mobileMenuOpen: false, searchExpanded: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <!-- Logo -->
             <div class="flex items-center">
                 <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center text-indigo-600 font-bold text-xl">
                     <i class="fas fa-feather-alt mr-2"></i>
@@ -88,18 +87,15 @@
                             </button>
                         </div>
 
-                        <!-- Profile dropdown menu -->
                         <div x-show="profileMenuOpen" @click.outside="profileMenuOpen = false"
                             class="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-gray-200 ring-opacity-50 divide-y divide-gray-100 focus:outline-none z-30"
                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
-                            <!-- Profile Info Section -->
                             <div class="py-2 px-4">
                                 <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->name }}</p>
                                 <p class="text-xs text-gray-500 truncate">{{ auth()->user()->email }}</p>
                             </div>
 
-                            <!-- Sign Out Link -->
                             <a href="#"
                                 onclick="event.preventDefault(); document.getElementById('dropdown-logout-form').submit();"
                                 class="group flex items-center px-4 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100 transition-colors duration-200"
@@ -108,7 +104,6 @@
                                 Sign out
                             </a>
 
-                            <!-- Hidden Form for Logout -->
                             <form id="dropdown-logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                 @csrf
                             </form>
@@ -158,7 +153,6 @@
                 </button>
             </div>
 
-            <!-- Mobile Search Options -->
             <div id="mobile-search-options" x-show="showMobileSearchOptions"
                 @click.outside="showMobileSearchOptions = false"
                 class="mt-2 bg-white rounded-lg shadow-lg p-3 border border-gray-200">

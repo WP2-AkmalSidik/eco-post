@@ -20,7 +20,6 @@ class HomeController extends Controller
         try {
             $postsQuery = Post::with(['user', 'categories', 'comments']);
 
-            // Search - mencari di judul post DAN nama kategori
             if ($request->filled('search')) {
                 $searchTerm = $request->search;
 
@@ -32,14 +31,12 @@ class HomeController extends Controller
                 });
             }
 
-            // Filter category (tetap bekerja bersama search)
             if ($request->filled('category') && $request->category != 'all') {
                 $postsQuery->whereHas('categories', function ($query) use ($request) {
                     $query->where('categories.id', $request->category);
                 });
             }
 
-            // Sorting (tetap sama)
             switch ($request->get('sort', 'newest')) {
                 case 'oldest':
                     $postsQuery->orderBy('created_at', 'asc');

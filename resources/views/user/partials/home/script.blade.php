@@ -1,37 +1,35 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const mobileSearchInput = document.getElementById('mobile-navbar-search');
-        const mobileSearchCategory = document.getElementById('mobile-search-category');
-        const mobileSearchSort = document.getElementById('mobile-search-sort');
-        const mobileApplySearch = document.getElementById('mobile-apply-search');
-
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
         const postsContainer = document.getElementById('posts-container');
 
         function showLoading() {
             postsContainer.innerHTML = `
-            <div class="text-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto"></div>
-                <p class="mt-4 text-gray-600">Memuat artikel...</p>
-            </div>
-        `;
+                <div class="text-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto"></div>
+                    <p class="mt-4 text-gray-600">Memuat artikel...</p>
+                </div>
+            `;
         }
 
         function showError(message) {
             postsContainer.innerHTML = `
-            <div class="text-center py-12">
-                <i class="fas fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
-                <h3 class="text-xl font-medium text-gray-900">Gagal Memuat</h3>
-                <p class="mt-2 text-gray-500">${message}</p>
-                <button onclick="loadPosts()" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                    Coba Lagi
-                </button>
-            </div>
-        `;
+                <div class="text-center py-12">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
+                    <h3 class="text-xl font-medium text-gray-900">Gagal Memuat</h3>
+                    <p class="mt-2 text-gray-500">${message}</p>
+                    <button onclick="loadPosts()" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                        Coba Lagi
+                    </button>
+                </div>
+            `;
         }
 
-        async function loadPosts(search = '', category = 'all', sort = 'newest') {
+        async function loadPosts(search = '') {
             showLoading();
+
+            const category = document.getElementById('category-filter').value;
+            const sort = document.getElementById('sort-filter').value;
 
             try {
                 const params = new URLSearchParams({
@@ -41,7 +39,7 @@
                     sort: sort
                 });
 
-                const response = await fetch(`{{ route('dashboard.user') }}?${params.toString()}`, {
+                const response = await fetch(`{{ route('home') }}?${params.toString()}`, {
                     headers: {
                         'Accept': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
@@ -109,61 +107,21 @@
             }
         }
 
-        if (mobileSearchInput) {
+        document.getElementById('category-filter').addEventListener('change', () => loadPosts());
+        document.getElementById('sort-filter').addEventListener('change', () => loadPosts());
+
+        const searchInput = document.querySelector('nav input[type="text"]');
+        if (searchInput) {
             let searchTimeout;
-            mobileSearchInput.addEventListener('input', function () {
+            searchInput.addEventListener('input', function () {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
-                    loadPosts(
-                        this.value,
-                        mobileSearchCategory.value,
-                        mobileSearchSort.value
-                    );
+                    loadPosts(this.value);
                 }, 500);
             });
-
-            // Enter key trigger
-            mobileSearchInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    loadPosts(
-                        this.value,
-                        mobileSearchCategory.value,
-                        mobileSearchSort.value
-                    );
-                }
-            });
         }
-
-        if (mobileApplySearch) {
-            mobileApplySearch.addEventListener('click', function () {
-                loadPosts(
-                    mobileSearchInput.value,
-                    mobileSearchCategory.value,
-                    mobileSearchSort.value
-                );
-            });
-        }
-
-        if (mobileSearchCategory) {
-            mobileSearchCategory.addEventListener('change', function () {
-                loadPosts(
-                    mobileSearchInput.value,
-                    this.value,
-                    mobileSearchSort.value
-                );
-            });
-        }
-
-        if (mobileSearchSort) {
-            mobileSearchSort.addEventListener('change', function () {
-                loadPosts(
-                    mobileSearchInput.value,
-                    mobileSearchCategory.value,
-                    this.value
-                );
-            });
-        }
-
-        window.loadPosts = loadPosts;
+        loadPosts();
     });
+
+    window.loadPosts = loadPosts;
 </script>
