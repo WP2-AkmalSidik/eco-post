@@ -120,8 +120,7 @@
 
                 <!-- Comment Section -->
                 <div class="mt-10 bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8">
-                    <h3 class="text-2xl font-bold mb-8">Comments ({{ $post->comments->count() }})</h3>
-
+                    <h3 class="text-2xl font-bold mb-8">Comments ({{ $post->total_comments }})</h3>
                     <!-- Comment Form -->
                     @auth
                         <form method="POST" action="{{ route('comments.store') }}" class="mb-10 comment-form">
@@ -145,7 +144,7 @@
                     @else
                         <div class="mb-6 p-4 bg-indigo-50 rounded-lg text-center">
                             <p class="text-indigo-800">Please <a href="{{ route('login') }}"
-                                    class="font-medium hover:underline">login</a> to leave a comment.</p>
+                                    class="font-medium hover:underline">login</a> or <a href="{{ route('register') }}" class="font-medium hover:underline">register</a> to leave a comment.</p>
                         </div>
                     @endauth
 

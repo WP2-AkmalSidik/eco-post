@@ -31,5 +31,11 @@ class Post extends Model
         $minutes = ceil($wordCount / 200); // 200 words per minute
         return $minutes;
     }
+
+    // app/Models/Post.php
+    public function totalCommentsCount()
+    {
+        return $this->comments()->count(); // Ini akan menghitung semua komentar termasuk replies
+    }
 }
 

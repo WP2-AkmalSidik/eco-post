@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class DetailPostController extends Controller
 {
-    public function index(Request $request)
+    // app/Http/Controllers/User/DetailPostController.php
+    public function show($slug)
     {
-        // Get post by slug with eager loading
         $post = Post::with([
             'user',
             'categories',
@@ -23,15 +23,15 @@ class DetailPostController extends Controller
                             $q->with('user');
                         }
                     ])
-                    ->orderBy('created_at', 'desc');
+                    ->orderBy('created_at', 'desc')
+                    ->limit(5);
             }
-        ])->where('slug', $request->slug)
+        ])->withCount(['comments as total_comments']) // Menambahkan count total komentar
+            ->where('slug', $slug)
             ->firstOrFail();
 
-        // Tambah view count
         $post->increment('views');
 
-        // Get related posts from the same category
         $relatedPosts = Post::with(['user', 'categories'])
             ->whereHas('categories', function ($query) use ($post) {
                 $query->whereIn('categories.id', $post->categories->pluck('id'));
@@ -40,7 +40,6 @@ class DetailPostController extends Controller
             ->limit(3)
             ->get();
 
-        // Get categories with post count
         $categories = Categorie::withCount('posts')->get();
 
         return view('user.pages.detail-post', compact('post', 'relatedPosts', 'categories'));
