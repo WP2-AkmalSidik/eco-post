@@ -14,9 +14,9 @@
                     <div class="absolute bottom-0 left-0 p-4">
                         @if($post->categories->isNotEmpty())
                             @php
-                                // Generate different background colors based on category
-                                $colors = ['bg-indigo-600', 'bg-green-600', 'bg-amber-600', 'bg-rose-600', 'bg-purple-600', 'bg-blue-600'];
-                                $colorIndex = $post->categories->first()->id % count($colors);
+            // Generate different background colors based on category
+            $colors = ['bg-indigo-600', 'bg-green-600', 'bg-amber-600', 'bg-rose-600', 'bg-purple-600', 'bg-blue-600'];
+            $colorIndex = $post->categories->first()->id % count($colors);
                             @endphp
                             <span
                                 class="inline-block px-2 py-1 text-xs font-semibold {{ $colors[$colorIndex] }} text-white rounded-md">
@@ -33,11 +33,9 @@
                         {{ \Illuminate\Support\Str::limit(strip_tags($post->body), 100) }}
                     </p>
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-1">
-                            <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/7.jpg"
-                                alt="{{ $post->user->name }}">
-                            <span class="text-sm text-gray-600">{{ $post->user->name }}</span>
-                        </div>
+                        <img class="h-8 w-8 rounded-full"
+                            src="{{ $post->user->photo ? asset('storage/' . $post->user->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name) }}"
+                            alt="{{ $post->user->name }}">
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="far fa-calendar-alt mr-1"></i>
                             <span>{{ $post->created_at->format('M d, Y') }}</span>

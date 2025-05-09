@@ -82,7 +82,8 @@
                                 class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 @click="profileMenuOpen = !profileMenuOpen" id="user-menu-button" aria-expanded="false"
                                 aria-haspopup="true">
-                                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/7.jpg"
+                                <img class="h-8 w-8 rounded-full"
+                                    src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
                                     alt="User profile">
                             </button>
                         </div>
@@ -199,9 +200,10 @@
         <div class="pt-2 pb-3 space-y-1 px-4">
             <div class="flex items-center justify-between px-3 py-3 border-b border-gray-100">
                 <div class="flex items-center">
-                    <img class="h-9 w-9 rounded-full" src="https://randomuser.me/api/portraits/men/7.jpg"
-                        alt="User profile">
                     @auth
+                        <img class="h-9 w-9 rounded-full"
+                            src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                            alt="User profile">
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-800">{{ auth()->user()->name }}</p>
                             <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>

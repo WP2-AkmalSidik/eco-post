@@ -72,7 +72,8 @@
                     <div class="p-6 md:p-8">
                         <div class="flex items-center space-x-4 mb-6">
                             <img class="h-12 w-12 rounded-full"
-                                src="https://randomuser.me/api/portraits/men/{{ $post->user->id }}.jpg" alt="Author">
+                                src="{{ $post->user->photo ? asset('storage/' . $post->user->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name) . '&size=128' }}"
+                                alt="{{ $post->user->name }}">
                             <div>
                                 <h3 class="text-sm font-medium">{{ $post->user->name }}</h3>
                                 <div class="flex items-center text-sm text-gray-500">
@@ -80,7 +81,7 @@
                                     <span>{{ $post->created_at->format('M d, Y') }}</span>
                                     <span class="mx-2">•</span>
                                     <i class="far fa-clock mr-1"></i>
-                                    <span>{{ $post->reading_time }} min read</span>
+                                    <span>{{ $post->reading_time }} min for read</span>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +129,8 @@
                             <input type="hidden" name="post_id" value="{{ $post->id }}">
                             <div class="flex items-start space-x-4">
                                 <img class="h-10 w-10 rounded-full"
-                                    src="https://randomuser.me/api/portraits/men/{{ auth()->id() }}.jpg" alt="Your profile">
+                                    src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=random' }}"
+                                    alt="Your profile">
                                 <div class="flex-grow">
                                     <textarea name="body"
                                         class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -171,8 +173,9 @@
                 <!-- Author Info -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-6">
                     <div class="flex items-center mb-4">
-                        <img class="h-16 w-16 rounded-full"
-                            src="https://randomuser.me/api/portraits/men/{{ $post->user->id }}.jpg" alt="Author">
+                        <img class="h-12 w-12 rounded-full"
+                            src="{{ $post->user->photo ? asset('storage/' . $post->user->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name) . '&size=128' }}"
+                            alt="{{ $post->user->name }}">
                         <div class="ml-4">
                             <h3 class="font-bold text-lg">{{ $post->user->name }}</h3>
                             <p class="text-gray-600">Member since {{ $post->user->created_at->format('M Y') }}</p>

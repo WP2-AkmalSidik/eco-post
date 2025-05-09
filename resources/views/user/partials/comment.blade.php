@@ -1,7 +1,8 @@
 <div class="border-b border-gray-200 pb-8 comment-container" id="comment-{{ $comment->id }}">
     <div class="flex items-start space-x-4">
-        <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/{{ $comment->user->id }}.jpg"
-            alt="Commenter">
+        <img class="h-10 w-10 rounded-full"
+            src="{{ $comment->user->photo ? asset('storage/' . $comment->user->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->name) }}"
+            alt="{{ $comment->user->name }}">
         <div class="flex-grow">
             <div class="flex items-center justify-between mb-1">
                 <h4 class="font-bold">{{ $comment->user->name }}</h4>
@@ -37,7 +38,8 @@
                         <input type="hidden" name="parent_id" value="{{ $comment->id }}">
                         <div class="flex items-start space-x-3">
                             <img class="h-8 w-8 rounded-full"
-                                src="https://randomuser.me/api/portraits/men/{{ auth()->id() }}.jpg" alt="Your profile">
+                                src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                                alt="Your profile">
                             <div class="flex-grow">
                                 <textarea name="body"
                                     class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
