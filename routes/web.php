@@ -9,7 +9,7 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\User\CreatePostController;
+use App\Http\Controllers\User\PostController;
 use App\Http\Controllers\User\DetailPostController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\User\UserProfileController;
@@ -38,10 +38,16 @@ Route::middleware('auth')->group(function () {
 
 // User Dashboard (require auth)
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
-    Route::get('/create-post', [CreatePostController::class, 'index'])->name('post.create');
-    Route::post('/create-post', [CreatePostController::class, 'store'])->name('post.store');
+    Route::get('/create-post', [PostController::class, 'index'])->name('post.create');
+    Route::post('/create-post', [PostController::class, 'store'])->name('post.store');
+    Route::put('/post/{slug}/update', [PostController::class, 'update'])->name('post.update');
+    Route::get('/post/{slug}/edit', [PostController::class, 'edit'])->name('post.edit');
+    Route::delete('/post/{id}', [PostController::class, 'destroy'])->name('post.destroy');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard.user');
+    // Profile Routes
     Route::get('/profile', [UserProfileController::class, 'index'])->name('profile.users');
+    Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/photo', [UserProfileController::class, 'deletePhoto'])->name('profile.delete.photo');
 });
 
 // Admin Dashboard
