@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Post;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = Faker::create('id_ID');
         // Admin
         User::create([
             'name' => 'Admin',
@@ -27,10 +29,11 @@ class DatabaseSeeder extends Seeder
 
         // User biasa
         $user = User::create([
-            'name' => 'User Biasa',
+            'name' => 'User One',
             'email' => 'user@example.com',
             'password' => Hash::make('password12'),
             'role' => 'user',
+            'bio' => $faker->sentence(15),
         ]);
 
         // Kategori

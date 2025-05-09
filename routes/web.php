@@ -5,10 +5,12 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\User\AboutController;
 use App\Http\Controllers\Admin\PostsController;
+use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\ProfileController;
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\User\CreatePostController;
 use App\Http\Controllers\User\DetailPostController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\User\UserProfileController;
@@ -29,12 +31,15 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
 
 // User Dashboard
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
+    Route::get('/create-post', [CreatePostController::class, 'index'])->name('post.create');
+    Route::post('/create-post', [CreatePostController::class, 'store'])->name('post.store');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard.user');
-    // detail blog
     Route::get('/detail-post', [DetailPostController::class, 'index'])->name('detail-post.index');
-    Route::get('/create-post', [HomeController::class, 'createPost'])->name('post.create');
     Route::get('/about', [AboutController::class, 'index'])->name('about.index');
     Route::get('/profile', [UserProfileController::class, 'index'])->name('profile.users');
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::get('/comments/load-more', [CommentController::class, 'loadMore'])->name('comments.load-more');
 });
 
 // Admin Dashboard

@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
-                <a href="#" class="flex-shrink-0 flex items-center text-indigo-600 font-bold text-xl">
+                <a href="{{ route('dashboard.user') }}" class="flex-shrink-0 flex items-center text-indigo-600 font-bold text-xl">
                     <i class="fas fa-feather-alt mr-2"></i>
                     ModernBlog
                 </a>

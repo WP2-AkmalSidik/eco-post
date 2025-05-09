@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image_path')->nullable();
             $table->text('body');
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }

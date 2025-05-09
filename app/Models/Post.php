@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Post extends Model
 {
-    protected $fillable = ['user_id', 'title', 'slug', 'image_path', 'body'];
+    protected $fillable = ['user_id', 'title', 'slug', 'image_path','views', 'body'];
 
     public function user(): BelongsTo
     {
@@ -23,7 +23,13 @@ class Post extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Categorie::class, 'post_category');
+        return $this->belongsToMany(Categorie::class, 'post_category', 'post_id', 'category_id');
+    }
+    public function getReadingTimeAttribute()
+    {
+        $wordCount = str_word_count(strip_tags($this->body));
+        $minutes = ceil($wordCount / 200); // 200 words per minute
+        return $minutes;
     }
 }
 

@@ -1,4 +1,5 @@
 @extends('layouts.user')
+@section('title', $post->title)
 
 @section('content')
     <div class="bg-indigo-700 text-white py-12">
@@ -15,7 +16,7 @@
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="flex items-center space-x-2">
                 <li>
-                    <a href="#" class="text-gray-500 hover:text-indigo-600">Home</a>
+                    <a href="{{ route('dashboard.user') }}" class="text-gray-500 hover:text-indigo-600">Home</a>
                 </li>
                 <li class="flex items-center">
                     <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -23,7 +24,7 @@
                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                             clip-rule="evenodd" />
                     </svg>
-                    <a href="#" class="ml-2 text-gray-500 hover:text-indigo-600">Blog</a>
+                    <a href="{{ route('dashboard.user') }}" class="ml-2 text-gray-500 hover:text-indigo-600">Blog</a>
                 </li>
                 <li class="flex items-center">
                     <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -31,7 +32,7 @@
                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span class="ml-2 text-gray-700 font-medium">The Future of Web Development in 2025</span>
+                    <span class="ml-2 text-gray-700 font-medium">{{ $post->title }}</span>
                 </li>
             </ol>
         </nav>
@@ -46,68 +47,48 @@
                 <article class="bg-white rounded-xl shadow-md overflow-hidden">
                     <!-- Post Header Image -->
                     <div class="relative h-72 md:h-96">
-                        <img class="w-full h-full object-cover" src="{{ asset('img/bangkit.png') }}" alt="Post featured image">
+                        @if($post->image_path)
+                            <img class="w-full h-full object-cover" src="{{ asset('storage/' . $post->image_path) }}"
+                                alt="{{ $post->title }}">
+                        @else
+                            <img class="w-full h-full object-cover" src="https://picsum.photos/800/400?random={{ $post->id }}"
+                                alt="Post featured image">
+                        @endif
                         <div class="absolute top-4 left-4">
-                            <span
-                                class="inline-block px-3 py-1 text-xs font-semibold bg-indigo-600 text-white rounded-md">Technology</span>
+                            @if($post->categories->isNotEmpty())
+                                @php
+    $colors = ['bg-indigo-600', 'bg-green-600', 'bg-amber-600', 'bg-rose-600', 'bg-purple-600', 'bg-blue-600'];
+    $colorIndex = $post->categories->first()->id % count($colors);
+                                @endphp
+                                <span
+                                    class="inline-block px-3 py-1 text-xs font-semibold {{ $colors[$colorIndex] }} text-white rounded-md">
+                                    {{ $post->categories->first()->name }}
+                                </span>
+                            @endif
                         </div>
                     </div>
 
                     <!-- Post Content -->
                     <div class="p-6 md:p-8">
                         <div class="flex items-center space-x-4 mb-6">
-                            <img class="h-12 w-12 rounded-full" src="https://randomuser.me/api/portraits/men/7.jpg"
-                                alt="Author">
+                            <img class="h-12 w-12 rounded-full"
+                                src="https://randomuser.me/api/portraits/men/{{ $post->user->id }}.jpg" alt="Author">
                             <div>
-                                <h3 class="text-sm font-medium">John Doe</h3>
+                                <h3 class="text-sm font-medium">{{ $post->user->name }}</h3>
                                 <div class="flex items-center text-sm text-gray-500">
                                     <i class="far fa-calendar-alt mr-1"></i>
-                                    <span>May 5, 2025</span>
+                                    <span>{{ $post->created_at->format('M d, Y') }}</span>
                                     <span class="mx-2">•</span>
                                     <i class="far fa-clock mr-1"></i>
-                                    <span>10 min read</span>
+                                    <span>{{ $post->reading_time }} min read</span>
                                 </div>
                             </div>
                         </div>
 
-                        <h1 class="text-3xl md:text-4xl font-bold mb-6">The Future of Web Development in 2025</h1>
+                        <h1 class="text-3xl md:text-4xl font-bold mb-6">{{ $post->title }}</h1>
 
                         <div class="prose max-w-none mb-8">
-                            <p class="mb-4">Web development has undergone significant transformation in recent years, with
-                                technologies evolving at an unprecedented pace. As we move further into 2025, several
-                                emerging trends are reshaping how developers build and maintain modern web applications.</p>
-
-                            <h2 class="text-2xl font-bold mt-8 mb-4">The Rise of AI-Powered Development</h2>
-                            <p class="mb-4">Artificial intelligence is revolutionizing the web development landscape. From
-                                code generation to automated testing, AI tools are now capable of handling increasingly
-                                complex tasks that once required human expertise. Developers are leveraging these
-                                capabilities to accelerate development cycles while maintaining high-quality standards.</p>
-                            <p class="mb-4">Machine learning models integrated into development environments can now suggest
-                                optimizations, identify potential bugs, and even refactor code bases with minimal human
-                                intervention.</p>
-
-                            <h2 class="text-2xl font-bold mt-8 mb-4">WebAssembly Goes Mainstream</h2>
-                            <p class="mb-4">WebAssembly (Wasm) has matured into a cornerstone technology for
-                                high-performance web applications. By allowing code written in languages like Rust, C++, and
-                                Go to run in browsers at near-native speed, WebAssembly has opened new possibilities for
-                                web-based gaming, advanced visualizations, and complex computational tasks.</p>
-                            <p class="mb-4">The ecosystem around WebAssembly has expanded dramatically, with improved
-                                tooling, broader language support, and deeper integration with existing JavaScript
-                                frameworks.</p>
-
-                            <h2 class="text-2xl font-bold mt-8 mb-4">Serverless Architecture Evolution</h2>
-                            <p class="mb-4">Serverless computing continues to evolve, with more sophisticated orchestration
-                                options and improved developer experiences. The boundary between traditional backend
-                                architectures and serverless solutions is increasingly blurred, giving teams more
-                                flexibility in how they structure their applications.</p>
-                            <p class="mb-4">Edge computing capabilities have enhanced serverless architectures, allowing
-                                developers to run code closer to end-users and reduce latency for global applications.</p>
-
-                            <h2 class="text-2xl font-bold mt-8 mb-4">Conclusion</h2>
-                            <p class="mb-4">The web development landscape of 2025 offers exciting possibilities for
-                                developers willing to embrace new technologies and methodologies. By staying informed about
-                                these trends and adopting them strategically, development teams can create faster, more
-                                secure, and more engaging web experiences.</p>
+                            {!! $post->body !!}
                         </div>
 
                         <!-- Social Sharing -->
@@ -130,7 +111,7 @@
                             <div class="flex items-center space-x-4">
                                 <button class="flex items-center space-x-2 text-gray-600 hover:text-indigo-600">
                                     <i class="far fa-eye mr-1"></i>
-                                    <span>1,203 views</span>
+                                    <span>{{ number_format($post->views) }} views</span>
                                 </button>
                             </div>
                         </div>
@@ -139,181 +120,50 @@
 
                 <!-- Comment Section -->
                 <div class="mt-10 bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8">
-                    <h3 class="text-2xl font-bold mb-8">Comments (24)</h3>
+                    <h3 class="text-2xl font-bold mb-8">Comments ({{ $post->comments->count() }})</h3>
 
                     <!-- Comment Form -->
-                    <form class="mb-10 comment-form">
-                        <div class="flex items-start space-x-4">
-                            <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/1.jpg"
-                                alt="Your profile">
-                            <div class="flex-grow">
-                                <textarea
-                                    class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                    rows="3" placeholder="Share your thoughts..."></textarea>
-                                <div class="mt-3 flex justify-end">
-                                    <button type="submit"
-                                        class="btn-submit px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors">Post
-                                        Comment</button>
+                    @auth
+                        <form method="POST" action="{{ route('comments.store') }}" class="mb-10 comment-form">
+                            @csrf
+                            <input type="hidden" name="post_id" value="{{ $post->id }}">
+                            <div class="flex items-start space-x-4">
+                                <img class="h-10 w-10 rounded-full"
+                                    src="https://randomuser.me/api/portraits/men/{{ auth()->id() }}.jpg" alt="Your profile">
+                                <div class="flex-grow">
+                                    <textarea name="body"
+                                        class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                        rows="3" placeholder="Share your thoughts..." required></textarea>
+                                    <div class="mt-3 flex justify-end">
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors">Post
+                                            Comment</button>
+                                    </div>
                                 </div>
                             </div>
+                        </form>
+                    @else
+                        <div class="mb-6 p-4 bg-indigo-50 rounded-lg text-center">
+                            <p class="text-indigo-800">Please <a href="{{ route('login') }}"
+                                    class="font-medium hover:underline">login</a> to leave a comment.</p>
                         </div>
-                    </form>
+                    @endauth
 
                     <!-- Comments List -->
-                    <div class="space-y-8">
-                        <!-- Comment 1 -->
-                        <div class="border-b border-gray-200 pb-8 comment-container">
-                            <div class="flex items-start space-x-4">
-                                <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/women/2.jpg"
-                                    alt="Commenter">
-                                <div class="flex-grow">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <h4 class="font-bold">Emma Watson</h4>
-                                        <span class="text-sm text-gray-500">2 hours ago</span>
-                                    </div>
-                                    <p class="text-gray-800 mb-3">This is a fantastic analysis of current trends! I'm
-                                        especially excited about the advancements in WebAssembly and how it's opening up new
-                                        possibilities for web applications.</p>
-                                    <div class="flex items-center space-x-4">
+                    <div class="space-y-8" id="comments-container">
+                        @foreach($post->comments as $comment)
+                            @include('user.partials.comment', ['comment' => $comment])
+                        @endforeach
+                    </div>
 
-                                        <button
-                                            class="reply-toggle flex items-center space-x-1 text-gray-500 hover:text-indigo-600">
-                                            <i class="far fa-comment"></i>
-                                            <span>Reply</span>
-                                        </button>
-                                    </div>
-
-                                    <!-- Reply Form (Hidden by default) -->
-                                    <div class="mt-4 hidden comment-form reply-form">
-                                        <div class="flex items-start space-x-3">
-                                            <img class="h-8 w-8 rounded-full"
-                                                src="https://randomuser.me/api/portraits/men/1.jpg" alt="Your profile">
-                                            <div class="flex-grow">
-                                                <form>
-                                                    <textarea
-                                                        class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                        rows="2" placeholder="Reply to Emma..." required></textarea>
-                                                    <div class="mt-2 flex justify-end">
-                                                        <button type="button"
-                                                            class="cancel-reply mr-2 px-3 py-1 text-sm border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-                                                        <button type="submit"
-                                                            class="px-3 py-1 text-sm bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">Reply</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Replies Container -->
-                                    <div class="replies-container mt-4 pl-5 border-l-2 border-gray-100 space-y-4">
-                                        <!-- Reply 1 -->
-                                        <div class="comment-container flex items-start space-x-3">
-                                            <img class="h-8 w-8 rounded-full"
-                                                src="https://randomuser.me/api/portraits/men/7.jpg" alt="Replier">
-                                            <div class="flex-grow">
-                                                <div class="flex items-center justify-between mb-1">
-                                                    <h5 class="font-bold text-sm">John Doe</h5>
-                                                    <span class="text-xs text-gray-500">1 hour ago</span>
-                                                </div>
-                                                <p class="text-gray-800 text-sm">Thanks Emma! I agree, WebAssembly is a
-                                                    game-changer. Have you worked on any projects using it yet?</p>
-                                                <div class="flex items-center space-x-4 mt-2">
-                                                    <button
-                                                        class="nested-reply-toggle flex items-center space-x-1 text-gray-500 hover:text-indigo-600 text-xs">
-                                                        <i class="far fa-comment"></i>
-                                                        <span>Reply</span>
-                                                    </button>
-                                                </div>
-
-                                                <!-- Nested Reply Form (Hidden by default) -->
-                                                <div class="mt-3 hidden comment-form nested-reply-form">
-                                                    <div class="flex items-start space-x-3">
-                                                        <img class="h-6 w-6 rounded-full"
-                                                            src="https://randomuser.me/api/portraits/men/1.jpg"
-                                                            alt="Your profile">
-                                                        <div class="flex-grow">
-                                                            <form>
-                                                                <textarea
-                                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                                    rows="2" placeholder="Reply to John..."
-                                                                    required></textarea>
-                                                                <div class="mt-2 flex justify-end">
-                                                                    <button type="button"
-                                                                        class="cancel-reply mr-2 px-3 py-1 text-xs border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-                                                                    <button type="submit"
-                                                                        class="px-3 py-1 text-xs bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">Reply</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Nested Replies Container -->
-                                                <div class="nested-replies mt-4 pl-5 border-l-2 border-gray-100 space-y-4">
-                                                    <!-- Nested replies will appear here -->
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Reply 2 -->
-                                        <div class="comment-container flex items-start space-x-3">
-                                            <img class="h-8 w-8 rounded-full"
-                                                src="https://randomuser.me/api/portraits/women/2.jpg" alt="Replier">
-                                            <div class="flex-grow">
-                                                <div class="flex items-center justify-between mb-1">
-                                                    <h5 class="font-bold text-sm">Emma Watson</h5>
-                                                    <span class="text-xs text-gray-500">30 minutes ago</span>
-                                                </div>
-                                                <p class="text-gray-800 text-sm">I've been experimenting with Rust and
-                                                    WebAssembly for a visualization project. The performance boost is
-                                                    incredible compared to plain JavaScript!</p>
-                                                <div class="flex items-center space-x-4 mt-2">
-                                                    <button
-                                                        class="nested-reply-toggle flex items-center space-x-1 text-gray-500 hover:text-indigo-600 text-xs">
-                                                        <i class="far fa-comment"></i>
-                                                        <span>Reply</span>
-                                                    </button>
-                                                </div>
-
-                                                <!-- Nested Reply Form (Hidden by default) -->
-                                                <div class="mt-3 hidden comment-form nested-reply-form">
-                                                    <div class="flex items-start space-x-3">
-                                                        <img class="h-6 w-6 rounded-full"
-                                                            src="https://randomuser.me/api/portraits/men/1.jpg"
-                                                            alt="Your profile">
-                                                        <div class="flex-grow">
-                                                            <form>
-                                                                <textarea
-                                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                                    rows="2" placeholder="Reply to Emma..."
-                                                                    required></textarea>
-                                                                <div class="mt-2 flex justify-end">
-                                                                    <button type="button"
-                                                                        class="cancel-reply mr-2 px-3 py-1 text-xs border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-                                                                    <button type="submit"
-                                                                        class="px-3 py-1 text-xs bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">Reply</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Nested Replies Container -->
-                                                <div class="nested-replies"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    @if($post->comments->count() > 5)
+                        <!-- Load More Comments -->
+                        <div class="mt-8 text-center">
+                            <button id="load-more-comments"
+                                class="px-6 py-2 border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">Load
+                                More Comments</button>
                         </div>
-                    </div>
-
-                    <!-- Load More Comments -->
-                    <div class="mt-8 text-center">
-                        <button
-                            class="px-6 py-2 border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">Load
-                            More Comments</button>
-                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -322,15 +172,14 @@
                 <!-- Author Info -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-6">
                     <div class="flex items-center mb-4">
-                        <img class="h-16 w-16 rounded-full" src="https://randomuser.me/api/portraits/men/7.jpg"
-                            alt="Author">
+                        <img class="h-16 w-16 rounded-full"
+                            src="https://randomuser.me/api/portraits/men/{{ $post->user->id }}.jpg" alt="Author">
                         <div class="ml-4">
-                            <h3 class="font-bold text-lg">John Doe</h3>
-                            <p class="text-gray-600">Member since June 2024 </p>
+                            <h3 class="font-bold text-lg">{{ $post->user->name }}</h3>
+                            <p class="text-gray-600">Member since {{ $post->user->created_at->format('M Y') }}</p>
                         </div>
                     </div>
-                    <p class="text-gray-700 mb-4">Web development enthusiast with over 10 years of experience. Passionate
-                        about emerging technologies and creating efficient, user-friendly applications.</p>
+                    <p class="text-gray-700 mb-4">{{ $post->user->bio ?? 'No bio available' }}</p>
                     <div class="flex space-x-3">
                         <a href="#" class="text-gray-600 hover:text-indigo-600">
                             <i class="fab fa-twitter"></i>
@@ -348,31 +197,40 @@
                 <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-6">
                     <h3 class="font-bold text-xl mb-4 pb-2 border-b border-gray-200">Categories</h3>
                     <div class="space-y-2">
-                        <a href="#"
-                            class="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span>Technology</span>
-                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">42</span>
-                        </a>
-                        <a href="#"
-                            class="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span>Design</span>
-                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">38</span>
-                        </a>
-                        <a href="#"
-                            class="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span>Business</span>
-                            <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-0.5 rounded">24</span>
-                        </a>
-                        <a href="#"
-                            class="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span>Lifestyle</span>
-                            <span class="bg-rose-100 text-rose-800 text-xs font-medium px-2.5 py-0.5 rounded">19</span>
-                        </a>
-                        <a href="#"
-                            class="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span>Culture</span>
-                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">15</span>
-                        </a>
+                        @foreach($categories as $category)
+                            <a href="{{ route('dashboard.user', ['category' => $category->id]) }}"
+                                class="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors">
+                                <span>{{ $category->name }}</span>
+                                <span
+                                    class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ $category->posts_count }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Related Posts -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-6">
+                    <h3 class="font-bold text-xl mb-4 pb-2 border-b border-gray-200">Related Posts</h3>
+                    <div class="space-y-4">
+                        @foreach($relatedPosts as $relatedPost)
+                            <a href="{{ route('detail-post.index', ['slug' => $relatedPost->slug]) }}"
+                                class="flex items-start space-x-3 group">
+                                @if($relatedPost->image_path)
+                                    <img class="h-16 w-16 rounded-lg object-cover"
+                                        src="{{ asset('storage/' . $relatedPost->image_path) }}" alt="{{ $relatedPost->title }}">
+                                @else
+                                    <img class="h-16 w-16 rounded-lg object-cover"
+                                        src="https://picsum.photos/100/100?random={{ $relatedPost->id }}"
+                                        alt="{{ $relatedPost->title }}">
+                                @endif
+                                <div>
+                                    <h4 class="font-medium group-hover:text-indigo-600">
+                                        {{ Str::limit($relatedPost->title, 50) }}
+                                    </h4>
+                                    <p class="text-xs text-gray-500 mt-1">{{ $relatedPost->created_at->format('M d, Y') }}</p>
+                                </div>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
 
@@ -392,168 +250,202 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .comment-replies {
-            transition: all 0.3s ease;
-        }
-
-        .comment-form:focus-within .btn-submit {
-            background-color: #4338ca;
-        }
-    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Function to handle all reply form toggles
+            console.log('Sistem komentar blog dimuat');
+
+            /**
+             * Fungsi utama yang menangani toggle untuk form reply
+             */
             function setupReplyToggles() {
-                // Primary reply toggles
+                // Bersihkan listener lama yang mungkin menumpuk
+                document.querySelectorAll('.reply-toggle').forEach(btn => {
+                    const newBtn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(newBtn, btn);
+                });
+
+                // Cara 1: Menggunakan data-comment-id
                 document.querySelectorAll('.reply-toggle').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const parent = this.closest('.comment-container');
-                        const replyForm = parent.querySelector('.reply-form');
-                        replyForm.classList.toggle('hidden');
-
-                        // Hide all other reply forms at the same level
-                        parent.querySelectorAll('.reply-form').forEach(form => {
-                            if (form !== replyForm) {
-                                form.classList.add('hidden');
-                            }
-                        });
-                    });
-                });
-
-                // Nested reply toggles (for replies to replies)
-                document.querySelectorAll('.nested-reply-toggle').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const parent = this.closest('.comment-container');
-                        const replyForm = parent.querySelector('.nested-reply-form');
-                        replyForm.classList.toggle('hidden');
-
-                        // Hide all other nested reply forms at the same level
-                        parent.querySelectorAll('.nested-reply-form').forEach(form => {
-                            if (form !== replyForm) {
-                                form.classList.add('hidden');
-                            }
-                        });
-                    });
-                });
-
-                // Cancel buttons
-                document.querySelectorAll('.cancel-reply').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const replyForm = this.closest('.comment-form');
-                        replyForm.classList.add('hidden');
-                    });
-                });
-            }
-
-            // Function to handle form submissions
-            function setupSubmitHandlers() {
-                document.querySelectorAll('.comment-form').forEach(form => {
-                    form.addEventListener('submit', function (e) {
+                    button.addEventListener('click', function (e) {
                         e.preventDefault();
+                        const commentId = this.getAttribute('data-comment-id');
 
-                        const textarea = this.querySelector('textarea');
-                        const replyContent = textarea.value.trim();
-
-                        if (!replyContent) return;
-
-                        // Create the new reply element
-                        const newReply = createReplyElement(replyContent, this.classList.contains('nested-reply-form'));
-
-                        // Determine where to insert the new reply
-                        const parentComment = this.closest('.comment-container');
-                        let repliesContainer;
-
-                        if (this.classList.contains('nested-reply-form')) {
-                            // This is a reply to a reply (nested)
-                            repliesContainer = parentComment.querySelector('.nested-replies');
-                            if (!repliesContainer) {
-                                // Create a new nested replies container if it doesn't exist
-                                repliesContainer = document.createElement('div');
-                                repliesContainer.className = 'nested-replies mt-4 pl-5 border-l-2 border-gray-100 space-y-4';
-                                parentComment.appendChild(repliesContainer);
-                            }
-                        } else {
-                            // This is a reply to the main comment
-                            repliesContainer = parentComment.querySelector('.replies-container');
-                            if (!repliesContainer) {
-                                // Create a new replies container if it doesn't exist
-                                repliesContainer = document.createElement('div');
-                                repliesContainer.className = 'replies-container mt-4 pl-5 border-l-2 border-gray-100 space-y-4';
-                                parentComment.appendChild(repliesContainer);
+                        if (commentId) {
+                            const replyForm = document.getElementById(`reply-form-${commentId}`);
+                            if (replyForm) {
+                                replyForm.classList.toggle('hidden');
+                                return;
                             }
                         }
 
-                        // Insert the new reply at the top of the container
-                        repliesContainer.prepend(newReply);
+                        // Cara 2: Menggunakan traversal DOM
+                        const commentContainer = this.closest('.comment-container');
+                        if (commentContainer) {
+                            const replyForm = commentContainer.querySelector('.reply-form');
+                            if (replyForm) {
+                                replyForm.classList.toggle('hidden');
+                            }
+                        }
+                    });
+                });
 
-                        // Clear and hide the form
-                        textarea.value = '';
-                        this.classList.add('hidden');
-
-                        // Setup event listeners for the new reply
-                        setupReplyToggles();
+                // Tombol cancel untuk menutup form
+                document.querySelectorAll('.cancel-reply').forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const replyForm = this.closest('.reply-form');
+                        if (replyForm) {
+                            replyForm.classList.add('hidden');
+                        }
                     });
                 });
             }
 
-            // Helper function to create a new reply element
-            function createReplyElement(content, isNested = false) {
-                const currentTime = new Date();
-                const timeStr = 'Just now';
+            /**
+             * Fungsi yang menangani submit form komentar
+             */
+            function setupCommentForms() {
+                document.querySelectorAll('form.comment-form').forEach(form => {
+                    form.addEventListener('submit', function (e) {
+                        // Hanya proses form yang memiliki action di atribut
+                        if (!this.action) return;
 
-                // Create a random profile image
-                const userIndex = Math.floor(Math.random() * 10) + 1;
-                const gender = Math.random() > 0.5 ? 'men' : 'women';
+                        e.preventDefault();
+                        const formData = new FormData(this);
+                        const submitButton = this.querySelector('button[type="submit"]');
+                        const originalText = submitButton.textContent;
 
-                const replyDiv = document.createElement('div');
-                replyDiv.className = 'comment-container flex items-start space-x-3';
+                        submitButton.disabled = true;
+                        submitButton.textContent = 'Posting...';
 
-                replyDiv.innerHTML = `
-                    <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/${gender}/${userIndex}.jpg" alt="User">
-                    <div class="flex-grow">
-                        <div class="flex items-center justify-between mb-1">
-                            <h5 class="font-bold text-sm">Current User</h5>
-                            <span class="text-xs text-gray-500">${timeStr}</span>
-                        </div>
-                        <p class="text-gray-800 text-sm">${content}</p>
-                        <div class="flex items-center space-x-4 mt-2">
-                            <button class="${isNested ? 'nested-reply-toggle' : 'reply-toggle'} flex items-center space-x-1 text-gray-500 hover:text-indigo-600 text-xs">
-                                <i class="far fa-comment"></i>
-                                <span>Reply</span>
-                            </button>
-                        </div>
-
-                        <!-- Reply Form (Hidden by default) -->
-                        <div class="mt-3 hidden comment-form ${isNested ? 'nested-reply-form' : 'reply-form'}">
-                            <div class="flex items-start space-x-3">
-                                <img class="h-6 w-6 rounded-full" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Your profile">
-                                <div class="flex-grow">
-                                    <form>
-                                        <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                                  rows="2" placeholder="Reply..." required></textarea>
-                                        <div class="mt-2 flex justify-end">
-                                            <button type="button" class="cancel-reply mr-2 px-3 py-1 text-xs border border-gray-300 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-                                            <button type="submit" class="px-3 py-1 text-xs bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">Reply</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Container for nested replies -->
-                        <div class="nested-replies"></div>
-                    </div>
-                `;
-
-                return replyDiv;
+                        fetch(this.action, {
+                            method: this.method || 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Reload halaman untuk menampilkan komentar baru
+                                    window.location.reload();
+                                } else {
+                                    alert('Error posting comment: ' + (data.message || 'Unknown error'));
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Error posting comment. Please try again.');
+                            })
+                            .finally(() => {
+                                submitButton.disabled = false;
+                                submitButton.textContent = originalText;
+                            });
+                    });
+                });
             }
 
-            // Initialize the event listeners
+            /**
+             * Fungsi yang menangani load more comments
+             */
+            function setupLoadMoreComments() {
+                const loadMoreBtn = document.getElementById('load-more-comments');
+                if (loadMoreBtn) {
+                    loadMoreBtn.addEventListener('click', function () {
+                        const commentsContainer = document.getElementById('comments-container');
+                        const currentCount = commentsContainer.querySelectorAll('.comment-container').length;
+
+                        // Cari post_id dari form komentar atau URL
+                        let postId;
+                        const postIdInput = document.querySelector('input[name="post_id"]');
+                        if (postIdInput) {
+                            postId = postIdInput.value;
+                        } else {
+                            // Coba ambil dari URL jika tidak ada di form
+                            const urlParams = new URLSearchParams(window.location.search);
+                            postId = urlParams.get('post_id');
+                        }
+
+                        if (!postId) {
+                            console.error('Post ID tidak ditemukan');
+                            return;
+                        }
+
+                        this.disabled = true;
+                        this.textContent = 'Loading...';
+
+                        fetch(`/user/comments/load-more?post_id=${postId}&offset=${currentCount}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success && data.html) {
+                                    commentsContainer.insertAdjacentHTML('beforeend', data.html);
+
+                                    // Re-initialize event handlers for new comments
+                                    setupReplyToggles();
+
+                                    if (data.remaining <= 0) {
+                                        this.style.display = 'none';
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error loading more comments:', error);
+                            })
+                            .finally(() => {
+                                this.disabled = false;
+                                this.textContent = 'Load More Comments';
+                            });
+                    });
+                }
+            }
+
+            /**
+             * Fungsi untuk memeriksa struktur DOM komentar
+             * Jika ada masalah dengan struktur, coba perbaiki
+             */
+            function checkAndFixCommentStructure() {
+                document.querySelectorAll('.comment-container').forEach((container, index) => {
+                    // Pastikan setiap container memiliki tombol reply
+                    const replyButton = container.querySelector('.reply-toggle');
+                    if (replyButton && !replyButton.hasAttribute('data-comment-id')) {
+                        // Jika tombol tidak memiliki data-comment-id, cari dari struktur DOM
+                        const commentId = container.id ? container.id.replace('comment-', '') : `temp-${index}`;
+                        replyButton.setAttribute('data-comment-id', commentId);
+                    }
+
+                    // Pastikan setiap container memiliki form reply
+                    const replyForm = container.querySelector('.reply-form');
+                    if (replyForm) {
+                        // Pastikan form memiliki id yang cocok dengan tombol
+                        const commentId = replyButton ? replyButton.getAttribute('data-comment-id') : `temp-${index}`;
+                        replyForm.id = `reply-form-${commentId}`;
+
+                        // Pastikan form disembunyikan di awal
+                        if (!replyForm.classList.contains('hidden')) {
+                            replyForm.classList.add('hidden');
+                        }
+                    }
+                });
+            }
+
+            // Inisialisasi semua fungsi
+            checkAndFixCommentStructure();
             setupReplyToggles();
-            setupSubmitHandlers();
+            setupCommentForms();
+            setupLoadMoreComments();
+
+            // Tambahkan indikator visual ketika tombol reply diklik
+            document.querySelectorAll('.reply-toggle').forEach(button => {
+                button.addEventListener('click', function () {
+                    // Buat efek visual
+                    this.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 300);
+                });
+            });
         });
     </script>
-
 @endsection
