@@ -33,12 +33,9 @@ class UserProfileController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
             if ($user->photo) {
-                // Hapus dari storage public
                 Storage::disk('public')->delete($user->photo);
             }
-            // Simpan ke storage public
             $validated['photo'] = $request->file('photo')->store('profile-photos', 'public');
         }
 
