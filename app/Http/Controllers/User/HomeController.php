@@ -11,38 +11,62 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil semua kategori untuk dropdown filter
         $categories = Categorie::all();
 
-        // Query dasar untuk postingan
-        $postsQuery = Post::with(['user', 'categories', 'comments'])
-            ->orderBy('created_at', 'desc');
-
-        // Filter berdasarkan kategori jika ada
-        if ($request->has('category') && $request->category != 'all') {
-            $postsQuery->whereHas('categories', function ($query) use ($request) {
-                $query->where('categories.id', $request->category);
-            });
+        if (!$request->ajax()) {
+            return view('user.pages.home', compact('categories'));
         }
 
-        // Sorting berdasarkan pilihan
-        if ($request->has('sort')) {
-            switch ($request->sort) {
+        try {
+            $postsQuery = Post::with(['user', 'categories', 'comments']);
+
+            // Search - mencari di judul post DAN nama kategori
+            if ($request->filled('search')) {
+                $searchTerm = $request->search;
+
+                $postsQuery->where(function ($query) use ($searchTerm) {
+                    $query->where('title', 'like', '%' . $searchTerm . '%')
+                        ->orWhereHas('categories', function ($q) use ($searchTerm) {
+                            $q->where('name', 'like', '%' . $searchTerm . '%');
+                        });
+                });
+            }
+
+            // Filter category (tetap bekerja bersama search)
+            if ($request->filled('category') && $request->category != 'all') {
+                $postsQuery->whereHas('categories', function ($query) use ($request) {
+                    $query->where('categories.id', $request->category);
+                });
+            }
+
+            // Sorting (tetap sama)
+            switch ($request->get('sort', 'newest')) {
                 case 'oldest':
                     $postsQuery->orderBy('created_at', 'asc');
                     break;
                 case 'popular':
+                    $postsQuery->orderBy('views', 'desc');
+                    break;
+                case 'most_commented':
                     $postsQuery->withCount('comments')->orderBy('comments_count', 'desc');
                     break;
                 default:
                     $postsQuery->orderBy('created_at', 'desc');
-                    break;
             }
+
+            $posts = $postsQuery->paginate(9);
+
+            return response()->json([
+                'success' => true,
+                'html' => view('user.partials.posts', compact('posts'))->render(),
+                'pagination' => $posts->appends($request->query())->links()->toHtml()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        // Pagination
-        $posts = $postsQuery->paginate(6);
-
-        return view('user.pages.home', compact('posts', 'categories'));
     }
 }
