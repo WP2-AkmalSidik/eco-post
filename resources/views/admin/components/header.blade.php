@@ -11,16 +11,17 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <div class="relative">
-                <button class="relative text-gray-600 focus:outline-none">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
-                </button>
-            </div>
             <div class="flex items-center space-x-3">
-                <span class="text-gray-700 hidden md:inline">John Doe</span>
-                <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                    JD
+                <span class="text-gray-700 hidden md:inline">{{ Auth::user()->name }}</span>
+                <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-200">
+                    @if(Auth::user()->photo)
+                        <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="{{ Auth::user()->name }}"
+                            class="h-full w-full object-cover">
+                    @else
+                        <div class="h-full w-full bg-indigo-600 flex items-center justify-center text-white font-bold">
+                            {{ substr(Auth::user()->name, 0, 2) }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

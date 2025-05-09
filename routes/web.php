@@ -54,8 +54,12 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin');
     Route::get('/posts', [PostsController::class, 'index'])->name('posts.index');
-    Route::get('/users', [ManagementUserController::class, 'index'])->name('users-management.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    // User Management Routes
+    Route::get('/users', [ManagementUserController::class, 'index'])->name('users-management.index');
+    Route::post('/users', [ManagementUserController::class, 'store'])->name('users-management.store');
+    Route::put('/users/{user}', [ManagementUserController::class, 'update'])->name('users-management.update');
+    Route::delete('/users/{user}', [ManagementUserController::class, 'destroy'])->name('users-management.destroy');
     // category
     Route::get('/category', [CategoriesController::class, 'index'])->name('category.index');
     Route::post('/categories', [CategoriesController::class, 'store'])->name('categories.store');
