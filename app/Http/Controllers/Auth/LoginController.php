@@ -23,13 +23,29 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            // Redirect berdasarkan role
-            return $this->redirectTo();
+            // Success alert
+            return $this->redirectTo()->with('swal', [
+                'icon' => 'success',
+                'title' => 'Login Successful!',
+                'text' => 'Welcome back, ' . auth()->user()->name . '!',
+                'timer' => 3000,
+                'position' => 'top-end',
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        // Set error message based on whether email exists
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        $errorMessage = $user
+            ? 'The password you entered is incorrect.'
+            : 'No account found with that email address.';
+
+        return back()->with('swal', [
+            'icon' => 'error',
+            'title' => 'Login Failed',
+            'text' => $errorMessage,
+            'confirmButtonText' => 'Try Again',
+        ])->withInput($request->only('email'));
     }
 
     protected function redirectTo()
@@ -47,6 +63,11 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('swal', [
+            'icon' => 'success',
+            'title' => 'Logged Out Successfully',
+            'text' => 'You have been safely logged out.',
+            'timer' => 2000,
+        ]);
     }
 }

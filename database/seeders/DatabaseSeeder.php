@@ -25,36 +25,32 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => Hash::make('akml1234'),
             'role' => 'admin',
+            'bio' => $faker->sentence(20),
         ]);
 
         // User biasa
-        $user = User::create([
-            'name' => 'User One',
-            'email' => 'user@example.com',
+        User::create([
+            'name' => 'Jhon Cenat',
+            'email' => 'Jhon@eco.com',
             'password' => Hash::make('password12'),
             'role' => 'user',
-            'bio' => $faker->sentence(15),
+            'bio' => $faker->sentence(20),
+        ]);
+        User::create([
+            'name' => 'Akmal Sidik',
+            'email' => 'akml@eco.com',
+            'password' => Hash::make('password12'),
+            'role' => 'user',
+            'bio' => $faker->sentence(20),
         ]);
 
         // Kategori
-        $categories = ['Laravel', 'PHP', 'Tailwind', 'News'];
+        $categories = ['Technologi', 'lifestyle', 'Kesehatan', 'Otomotif', 'Olahraga'];
         foreach ($categories as $cat) {
             Categorie::create([
                 'name' => $cat,
                 'slug' => Str::slug($cat),
             ]);
         }
-
-        // Post Dummy
-        $post = Post::create([
-            'user_id' => $user->id,
-            'title' => 'Contoh Post Laravel',
-            'slug' => 'contoh-post-laravel',
-            'body' => 'Ini adalah isi post contoh tentang Laravel.',
-            'image_path' => null
-        ]);
-
-        // Assign ke kategori
-        $post->categories()->attach([1, 2]); // Laravel dan PHP
     }
 }
